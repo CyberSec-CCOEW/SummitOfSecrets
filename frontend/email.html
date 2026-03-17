@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NovaMail</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+body{background:radial-gradient(circle at top,#1f2937,#05070c);height:100vh;color:#fff;overflow:hidden;}
+.window{width:95%;height:90vh;margin:5vh auto;background:rgba(15,18,25,0.78);backdrop-filter:blur(22px);border-radius:18px;box-shadow:0 40px 80px rgba(0,0,0,0.65);display:flex;flex-direction:column;}
+.titlebar{height:44px;display:flex;align-items:center;padding:0 14px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.dots{display:flex;gap:8px;}
+.dot{width:12px;height:12px;border-radius:50%;cursor:pointer;}
+.red{background:#ff5f57;}
+.yellow{background:#ffbd2e;}
+.green{background:#28c840;}
+.title{flex:1;text-align:center;font-size:13px;color:#cfcfcf;margin-right:60px;}
+.main{flex:1;display:flex;overflow:hidden;}
+.sidebar{width:260px;padding:20px;border-right:1px solid rgba(255,255,255,0.08);}
+.profile{display:flex;align-items:center;gap:12px;padding:14px;background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.04));border-radius:14px;margin-bottom:20px;}
+.avatar{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-weight:600;}
+.compose{width:100%;padding:12px;border:none;border-radius:14px;background:linear-gradient(90deg,#4facfe,#00f2fe);color:#000;font-weight:600;cursor:pointer;margin-bottom:20px;}
+.menu{padding:10px 14px;border-radius:12px;cursor:pointer;color:#ddd;}
+.menu.active{background:rgba(255,255,255,.2);}
+.menu:hover{background:rgba(255,255,255,.12);}
+
+.mailList{width:360px;border-right:1px solid rgba(255,255,255,0.08);overflow-y:auto;}
+.mail{padding:14px;border-bottom:1px solid rgba(255,255,255,0.05);cursor:pointer;position:relative;}
+.mail:hover{background:rgba(255,255,255,.08);}
+.mail.unread .from{font-weight:600;}
+.starMark{
+ position:absolute;
+ right:14px;
+ top:18px;
+ font-size:14px;
+ color:#ffd369;
+}
+.from{font-size:14px;}
+.sub{font-size:13px;color:#bbb;}
+.time{font-size:11px;color:#888;}
+
+.mailView{flex:1;padding:24px;}
+.mailCard{background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,.02));border-radius:16px;padding:24px;height:100%;}
+
+.mailHeader{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+}
+
+.mailHeader h3{margin:0;}
+
+.actions{
+ display:flex;
+ gap:10px;
+}
+
+.actions button{
+ padding:6px 12px;
+ border-radius:10px;
+ border:none;
+ cursor:pointer;
+ background:rgba(255,255,255,.15);
+ color:#fff;
+}
+
+.body{margin-top:16px;color:#ddd;line-height:1.6;}
+
+.composeModal{
+ position:fixed;
+ right:30px;
+ bottom:30px;
+ width:420px;
+ background:rgba(15,18,25,.92);
+ backdrop-filter:blur(20px);
+ border-radius:16px;
+ padding:16px;
+ display:none;
+ box-shadow:0 25px 60px rgba(0,0,0,.6);
+}
+
+.composeModal input,
+.composeModal textarea{
+ width:100%;
+ margin-bottom:10px;
+ padding:10px;
+ border-radius:10px;
+ border:1px solid rgba(255,255,255,.1);
+ background:rgba(255,255,255,.08);
+ color:#fff;
+}
+
+.composeActions{display:flex;gap:10px;}
+.composeActions button{flex:1;padding:8px;border-radius:10px;border:none;cursor:pointer;}
+.sendBtn{background:linear-gradient(90deg,#4facfe,#00f2fe);color:#000;font-weight:600;}
+.draftBtn{background:rgba(255,255,255,.15);color:#fff;}
+</style>
+</head>
+
+<body>
+
+<div class="window">
+
+<div class="titlebar">
+  <div class="dots">
+    <div class="dot red"></div>
+    <div class="dot yellow"></div>
+    <div class="dot green"></div>
+  </div>
+  <div class="title"><h2>NOVA MAIL</h2></div>
+</div>
+
+<div class="main">
+
+<div class="sidebar">
+  <div class="profile">
+    <div class="avatar">A</div>
+    <div>
+      <div>Arjun Mehta</div>
+      <small style="color:#aaa">CEO • NovaNest</small>
+    </div>
+  </div>
+
+  <button class="compose" onclick="openCompose()">Compose</button>
+
+  <div class="menu active" onclick="switchFolder('inbox',this)">Inbox</div>
+  <div class="menu" onclick="switchFolder('starred',this)">Starred</div>
+  <div class="menu" onclick="switchFolder('sent',this)">Sent</div>
+  <div class="menu" onclick="switchFolder('drafts',this)">Drafts</div>
+</div>
+
+<div class="mailList" id="list"></div>
+
+<div class="mailView">
+  <div class="mailCard">
+    <div class="mailHeader">
+      <h3 id="subject">Select a mail</h3>
+      <div class="actions">
+        <button onclick="toggleStar()">⭐</button>
+        <button onclick="remove()">🗑</button>
+      </div>
+    </div>
+    <div class="body" id="body"></div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<div class="composeModal" id="composeBox">
+ <input id="toField" placeholder="To">
+ <input id="subField" placeholder="Subject">
+ <textarea id="bodyField" placeholder="Message..."></textarea>
+ <div class="composeActions">
+  <button class="draftBtn" onclick="saveDraft()">Save Draft</button>
+  <button class="sendBtn" onclick="sendMail()">Send</button>
+ </div>
+</div>
+
+<script>
+let currentFolder="inbox";
+let currentMail=null;
+
+const folders={
+ inbox:[
+  {from:"Internal Audit",sub:"Discrepancy in Policy Records",body:"We found inconsistencies.",unread:true,starred:true},
+  {from:"SRJU Insurance",sub:"Policy Approved",body:"Your policy is approved.",unread:true,starred:false}
+ ],
+ sent:[],
+ drafts:[]
+};
+
+function getMails(){
+ if(currentFolder==="starred"){
+  return Object.values(folders).flat().filter(m=>m.starred);
+ }
+ return folders[currentFolder];
+}
+
+function render(){
+ list.innerHTML="";
+ getMails().forEach((m,i)=>{
+  list.innerHTML+=`
+  <div class="mail ${m.unread?'unread':''}" onclick="openMail(${i})">
+    <div class="from">${m.from}</div>
+    <div class="sub">${m.sub}</div>
+    ${m.starred?'<div class="starMark">⭐</div>':''}
+    <div class="time">${new Date().toLocaleTimeString()}</div>
+  </div>`;
+ });
+}
+
+function openMail(i){
+ const m=getMails()[i];
+ currentMail=m;
+ m.unread=false;
+ subject.innerText=m.sub;
+ body.innerText=m.body;
+ render();
+}
+
+function toggleStar(){
+ if(!currentMail) return;
+ currentMail.starred=!currentMail.starred;
+ render();
+}
+
+function switchFolder(f,el){
+ currentFolder=f;
+ document.querySelectorAll('.menu').forEach(m=>m.classList.remove('active'));
+ el.classList.add('active');
+ subject.innerText="Select a mail";
+ body.innerText="";
+ render();
+}
+
+function remove(){
+ subject.innerText="Select a mail";
+ body.innerText="";
+}
+
+function openCompose(){composeBox.style.display="block";}
+function closeCompose(){composeBox.style.display="none";}
+
+function sendMail(){
+ folders.sent.unshift({
+  from:"You → "+toField.value,
+  sub:subField.value,
+  body:bodyField.value,
+  unread:false,
+  starred:false
+ });
+ clearCompose();
+}
+
+function saveDraft(){
+ folders.drafts.unshift({
+  from:"Draft",
+  sub:subField.value||"(No Subject)",
+  body:bodyField.value||"",
+  unread:false,
+  starred:false
+ });
+ clearCompose();
+}
+
+function clearCompose(){
+ toField.value=subField.value=bodyField.value="";
+ closeCompose();
+}
+
+render();
+</script>
+
+<script>
+/* ================================
+   MAC WINDOW CONTROLS (3 DOTS)
+   ================================ */
+(function () {
+  const win = document.querySelector('.window');
+  const dots = document.querySelectorAll('.dot');
+
+  if (dots.length === 3) {
+    // RED – Close
+    dots[0].addEventListener('click', () => {
+      win.style.display = 'none';
+    });
+
+    // YELLOW – Minimize
+    dots[1].addEventListener('click', () => {
+      win.style.transform = 'scale(0.9) translateY(140%)';
+      win.style.opacity = '0';
+      win.style.pointerEvents = 'none';
+
+      document.body.addEventListener('click', restoreOnce, { once: true });
+      function restoreOnce() {
+        win.style.transform = '';
+        win.style.opacity = '';
+        win.style.pointerEvents = '';
+      }
+    });
+
+    // GREEN – Fullscreen toggle
+    dots[2].addEventListener('click', () => {
+      win.classList.toggle('maximized');
+
+      if (win.classList.contains('maximized')) {
+        win.style.width = '100vw';
+        win.style.height = '100vh';
+        win.style.margin = '0';
+        win.style.borderRadius = '0';
+      } else {
+        win.style.width = '';
+        win.style.height = '';
+        win.style.margin = '';
+        win.style.borderRadius = '';
+      }
+    });
+  }
+})();
+</script>
+
+<script>
+/* ================================
+   TOP RIGHT NAVBAR (ADD ONLY)
+   ================================ */
+(function () {
+  const titleBar = document.querySelector('.titlebar');
+
+  const nav = document.createElement('div');
+  nav.style.display = 'flex';
+  nav.style.gap = '14px';
+  nav.style.alignItems = 'center';
+  nav.style.marginLeft = 'auto';
+  nav.style.marginRight = '10px';
+
+  nav.innerHTML = `
+    <span style="cursor:pointer;opacity:.8">🔍</span>
+    <span style="cursor:pointer;opacity:.8">🔔</span>
+    <span style="cursor:pointer;opacity:.8">🧩</span>
+    <div style="
+      width:26px;
+      height:26px;
+      border-radius:50%;
+      background:linear-gradient(135deg,#4facfe,#00f2fe);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#000;
+      font-weight:600;
+      font-size:13px;
+      cursor:pointer;
+    ">A</div>
+  `;
+
+  titleBar.appendChild(nav);
+})();
+</script>
+
+</body>
+</html>
