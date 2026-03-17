@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SRJU Insurance – Home</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Inter',sans-serif;
+}
+
+body{
+  background:radial-gradient(circle at top,#1f2937,#05070c);
+  color:#fff;
+  height:100vh;
+  overflow:hidden;
+}
+
+/* WINDOW */
+.window{
+  width:95%;
+  height:90vh;
+  margin:5vh auto;
+  border-radius:18px;
+  background:rgba(15,18,25,0.78);
+  backdrop-filter:blur(22px);
+  box-shadow:0 40px 80px rgba(0,0,0,0.65);
+  display:flex;
+  flex-direction:column;
+  transition:all .35s ease;
+}
+
+.window.minimized{
+  transform:scale(.92) translateY(140%);
+  opacity:0;
+  pointer-events:none;
+}
+
+.window.maximized{
+  width:100vw;
+  height:100vh;
+  margin:0;
+  border-radius:0;
+}
+
+/* TITLE BAR */
+.title-bar{
+  height:44px;
+  display:flex;
+  align-items:center;
+  padding:0 14px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+.dots{display:flex;gap:8px;}
+.dot{width:12px;height:12px;border-radius:50%;cursor:pointer;}
+.red{background:#ff5f57;}
+.yellow{background:#ffbd2e;}
+.green{background:#28c840;}
+
+.title{
+  flex:1;
+  text-align:center;
+  font-size:13px;
+  color:#cfcfcf;
+  margin-right:60px;
+}
+
+/* CONTENT */
+.content{
+  flex:1;
+  padding:22px;
+  overflow-y:auto;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:320px 1fr;
+  gap:22px;
+}
+
+/* GLASS CARD */
+.glass{
+  background:linear-gradient(135deg,rgba(255,255,255,0.10),rgba(255,255,255,0.02));
+  backdrop-filter:blur(18px);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:16px;
+  box-shadow:0 18px 40px rgba(0,0,0,0.5),
+             inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+/* PROFILE */
+.profile{padding:22px;}
+.profile-top{display:flex;align-items:center;gap:14px;}
+.avatar{
+  width:56px;height:56px;border-radius:50%;
+  background:rgba(255,255,255,0.18);
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;
+}
+.profile-info h3{font-size:18px;font-weight:600;}
+.badge{
+  margin-top:4px;font-size:12px;padding:4px 10px;
+  border-radius:10px;
+  background:linear-gradient(90deg,#4facfe,#00f2fe);
+  color:#000;font-weight:600;display:inline-block;
+}
+.divider{height:1px;background:rgba(255,255,255,0.12);margin:18px 0;}
+.info .row{display:flex;justify-content:space-between;padding:8px 0;}
+.label{font-size:12px;color:#aaa;}
+.value{font-size:13px;color:#fff;text-align:right;}
+
+/* RIGHT */
+.right-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:18px;
+}
+.card{padding:20px;}
+.card h4{font-size:12px;color:#bbb;margin-bottom:6px;}
+.card p{font-size:20px;font-weight:600;}
+
+.section{margin-top:20px;padding:20px;}
+.section-title{font-size:13px;color:#ccc;margin-bottom:12px;}
+
+.download-btn{
+  margin-top:16px;
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:14px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:600;
+  color:#000;
+  background:linear-gradient(90deg,#4facfe,#00f2fe);
+  box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+}
+th,td{
+  padding:10px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+th{
+  color:#aaa;
+  font-weight:500;
+}
+
+::-webkit-scrollbar{width:8px;}
+::-webkit-scrollbar-thumb{
+  background:rgba(255,255,255,0.25);
+  border-radius:8px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="window" id="macWindow">
+
+  <!-- TITLE BAR -->
+  <div class="title-bar">
+    <div class="dots">
+      <div class="dot red" onclick="macClose()"></div>
+      <div class="dot yellow" onclick="macMinimize()"></div>
+      <div class="dot green" onclick="macMaximize()"></div>
+    </div>
+    <div class="title"><h2>SRJU Insurance</h2></div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+    <div class="grid">
+
+      <!-- LEFT -->
+      <div class="profile glass">
+        <div class="profile-top">
+          <div class="avatar">👤</div>
+          <div class="profile-info">
+            <h3>Arjun Mehta</h3>
+            <span class="badge">Premium Customer</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="info">
+          <div class="row"><span class="label">Customer ID</span><span class="value">SRJU1024</span></div>
+          <div class="row"><span class="label">Email</span><span class="value">arjun.mehta@srjuinsurance.com</span></div>
+          <div class="row"><span class="label">Phone</span><span class="value">+91 98765 43210</span></div>
+          <div class="row"><span class="label">Address</span><span class="value">42, MG Road, Bangalore</span></div>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div>
+
+        <div class="right-grid">
+          <div class="card glass"><h4>Active Policies</h4><p>3</p></div>
+          <div class="card glass"><h4>Total Coverage</h4><p>₹25,00,000</p></div>
+          <div class="card glass"><h4>Claims Filed</h4><p>3</p></div>
+          <div class="card glass"><h4>Pending Claims</h4><p>1</p></div>
+        </div>
+
+        <div class="section glass">
+          <div class="section-title">Policy Details</div>
+          <div class="info">
+            <div class="row"><span class="label">Primary Policy</span><span class="value">Health Insurance</span></div>
+            <div class="row"><span class="label">Policy Term</span><span class="value">2023 – 2028</span></div>
+            <div class="row"><span class="label">Premium</span><span class="value">₹18,000 / year</span></div>
+          </div>
+          <button class="download-btn">Download Policy Document</button>
+        </div>
+
+        <div class="section glass">
+          <div class="section-title">Policy History</div>
+          <table>
+            <tr><th>Policy</th><th>Status</th><th>Amount</th></tr>
+            <tr><td>Health Insurance</td><td>Active</td><td>₹10,00,000</td></tr>
+            <tr><td>Car Insurance</td><td>Active</td><td>₹5,00,000</td></tr>
+            <tr><td>Life Insurance</td><td>Expired</td><td>₹10,00,000</td></tr>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let isMax=false;
+const win=document.getElementById("macWindow");
+
+function macClose(){
+  win.style.display="none";
+}
+
+function macMinimize(){
+  win.classList.add("minimized");
+  document.body.onclick=()=>{
+    win.classList.remove("minimized");
+    document.body.onclick=null;
+  };
+}
+
+function macMaximize(){
+  win.classList.toggle("maximized");
+  isMax=!isMax;
+}
+</script>
+
+</body>
+</html>
