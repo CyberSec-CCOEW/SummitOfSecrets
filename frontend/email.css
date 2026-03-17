@@ -1,0 +1,212 @@
+*{
+  box-sizing:border-box;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif;
+}
+
+body{
+  margin:0;
+  height:100vh;
+  background:radial-gradient(circle at top,#1c1c1e,#0f0f11);
+  overflow:hidden;
+  color:#f5f5f7;
+}
+
+/* MAC WINDOW */
+.macWindow{
+  margin:18px;
+  height:calc(100vh - 36px);
+  background:rgba(28,28,30,0.92);
+  backdrop-filter:blur(22px);
+  border-radius:14px;
+  box-shadow:0 40px 90px rgba(0,0,0,.7);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+.fullscreen{
+  margin:0!important;
+  width:100vw!important;
+  height:100vh!important;
+  border-radius:0!important;
+}
+
+/* TITLE BAR */
+.macTopBar{
+  height:44px;
+  background:rgba(44,44,46,.95);
+  display:flex;
+  align-items:center;
+  padding:0 14px;
+}
+
+.macDots{display:flex;gap:8px;}
+.dot{width:12px;height:12px;border-radius:50%;}
+.red{background:#ff5f56;}
+.yellow{background:#ffbd2e;}
+.green{background:#27c93f;}
+
+.macTitle{
+  margin-left:14px;
+  font-size:14px;
+  color:#c7c7cc;
+}
+
+/* SCROLLABLE CONTENT */
+.appContent{
+  flex:1;
+  overflow:hidden;
+}
+
+.main{
+  display:flex;
+  height:100%;
+}
+
+/* SIDEBAR */
+.sidebar{
+  width:260px;
+  padding:20px;
+  background:rgba(44,44,46,.9);
+  border-right:1px solid #2c2c2e;
+}
+
+.profileCard{
+  display:flex;
+  gap:12px;
+  padding:14px;
+  border-radius:12px;
+  background:#2c2c2e;
+  margin-bottom:18px;
+}
+
+.profileAvatar{
+  width:44px;height:44px;border-radius:50%;
+  background:#0a84ff;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:600;
+}
+
+.composeBtn{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:24px;
+  background:#0a84ff;
+  color:white;
+  margin-bottom:20px;
+  cursor:pointer;
+}
+
+.sectionTitle{
+  font-size:11px;
+  color:#8e8e93;
+  margin-bottom:10px;
+}
+
+.menu{
+  padding:10px 14px;
+  border-radius:20px;
+  cursor:pointer;
+  color:#c7c7cc;
+}
+.menu:hover{background:#3a3a3c;}
+.active{background:#0a84ff;color:white;}
+
+.badge{
+  background:#ff453a;
+  padding:2px 8px;
+  border-radius:20px;
+  font-size:11px;
+}
+
+/* MAIL LIST */
+.mailList{
+  width:420px;
+  background:#1c1c1e;
+  border-right:1px solid #2c2c2e;
+  overflow-y:auto;
+}
+
+.mailItem{
+  display:flex;
+  padding:14px;
+  border-bottom:1px solid #2c2c2e;
+  cursor:pointer;
+}
+.mailItem:hover{background:#2c2c2e;}
+.unread .sender{font-weight:700;}
+
+.avatar{
+  width:38px;height:38px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  margin-right:12px;
+  background:#636366;
+}
+
+.snippet{font-size:13px;color:#8e8e93;}
+.time{font-size:12px;color:#8e8e93;}
+
+/* MAIL VIEW */
+.mailView{
+  flex:1;
+  padding:20px;
+  overflow-y:auto;
+}
+
+.mailCard{
+  height:100%;
+  background:#1c1c1e;
+}
+
+.headerActions button{
+  background:#2c2c2e;
+  border:none;
+  color:white;
+  padding:6px 14px;
+  border-radius:16px;
+  cursor:pointer;
+}
+
+.divider{
+  height:1px;
+  background:#2c2c2e;
+  margin:20px 0;
+}
+
+/* COMPOSE */
+.composeModal{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  display:none;
+}
+
+.composeBox{
+  width:480px;
+  background:#1c1c1e;
+  border-radius:12px;
+  padding:16px;
+}
+
+.composeBox input,
+.composeBox textarea{
+  width:100%;
+  margin-bottom:10px;
+  background:#2c2c2e;
+  border:none;
+  padding:10px;
+  color:white;
+}
+
+#toast{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#0a84ff;
+  color:white;
+  padding:10px 20px;
+  border-radius:20px;
+  display:none;
+}
