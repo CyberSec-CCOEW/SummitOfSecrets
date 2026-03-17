@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Leaderboard - Nova System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+
+body{
+ background:radial-gradient(circle at top,#1f2937,#05070c);
+ height:100vh;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ color:#fff;
+}
+
+/* WINDOW */
+.window{
+ width:90%;
+ height:90vh;
+ background:rgba(15,18,25,0.78);
+ backdrop-filter:blur(22px);
+ border-radius:18px;
+ box-shadow:0 40px 80px rgba(0,0,0,0.65);
+ display:flex;
+ flex-direction:column;
+ overflow:hidden;
+}
+
+/* TITLEBAR */
+.titlebar{
+ height:44px;
+ display:flex;
+ align-items:center;
+ padding:0 14px;
+ border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+.dots{display:flex;gap:8px;}
+.dot{width:12px;height:12px;border-radius:50%;cursor:pointer;}
+.red{background:#ff5f57;}
+.yellow{background:#ffbd2e;}
+.green{background:#28c840;}
+
+.title{
+ flex:1;
+ text-align:center;
+ font-size:14px;
+ color:#cfcfcf;
+ margin-right:60px;
+}
+
+/* CONTENT */
+.container{
+ flex:1;
+ padding:20px 30px;
+ display:flex;
+ flex-direction:column;
+ gap:20px;
+ overflow:hidden;
+}
+
+/* TOP BAR */
+.topBar{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+}
+
+.filter{
+ padding:10px;
+ border-radius:10px;
+ background:rgba(255,255,255,.1);
+ border:none;
+ color:#fff;
+}
+
+/* PODIUM */
+.podium{
+ display:flex;
+ gap:20px;
+}
+
+.card{
+ flex:1;
+ padding:18px;
+ border-radius:16px;
+ background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.02));
+ text-align:center;
+}
+
+.card h2{margin-bottom:6px;}
+.gold{border:1px solid #ffd700;}
+.silver{border:1px solid #c0c0c0;}
+.bronze{border:1px solid #cd7f32;}
+
+/* TABLE */
+.tableWrap{
+ flex:1;
+ overflow-y:auto;
+ border-radius:14px;
+}
+
+table{
+ width:100%;
+ border-collapse:collapse;
+}
+
+th{
+ text-align:left;
+ padding:14px;
+ font-size:12px;
+ color:#aaa;
+ border-bottom:1px solid rgba(255,255,255,.1);
+}
+
+td{
+ padding:14px;
+ border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+tr:hover{
+ background:rgba(255,255,255,.06);
+}
+
+/* STATUS */
+.status{
+ padding:4px 10px;
+ border-radius:8px;
+ font-size:12px;
+}
+
+/* SEARCH BOX */
+.searchBox{
+ position:relative;
+ width:260px;
+ transition:.3s;
+}
+
+/* INPUT */
+.searchBox input{
+ width:100%;
+ padding:10px 14px 10px 36px;
+ border-radius:12px;
+ border:1px solid rgba(255,255,255,0.08);
+ background:linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02));
+ color:#fff;
+ outline:none;
+ transition:.25s;
+ backdrop-filter:blur(10px);
+}
+
+/* ICON */
+.searchIcon{
+ position:absolute;
+ top:50%;
+ left:12px;
+ transform:translateY(-50%);
+ font-size:14px;
+ opacity:1;
+}
+
+/* make svg crisp */
+.searchIcon svg{
+ opacity:0.7;
+ display:block;
+}
+
+.searchBox input:focus + .searchIcon svg,
+.searchBox:focus-within .searchIcon svg{
+ stroke:#4facfe;
+ opacity:1;
+}
+
+/* HOVER */
+.searchBox input:hover{
+ border:1px solid rgba(255,255,255,0.2);
+}
+
+/* FOCUS */
+.searchBox input:focus{
+ border:1px solid rgba(79,172,254,0.7);
+ box-shadow:0 0 12px rgba(79,172,254,0.4);
+ background:rgba(255,255,255,0.12);
+}
+
+/* OPTIONAL EXPAND EFFECT */
+.searchBox:focus-within{
+ width:300px;
+}
+
+/* DROPDOWN */
+.dropdown{
+ position:relative;
+ width:200px;
+}
+
+.dropdown-btn{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ padding:10px 14px;
+ border-radius:12px;
+ cursor:pointer;
+ background:rgba(255,255,255,0.08);
+ transition:.25s;
+}
+
+.dropdown-btn:hover{
+ background:rgba(255,255,255,0.15);
+}
+
+.arrow{
+ font-size:12px;
+ opacity:.7;
+}
+
+/* MENU */
+.dropdown-menu{
+ position:absolute;
+ top:110%;
+ width:100%;
+ border-radius:12px;
+ background:rgba(20,24,32,0.95);
+ backdrop-filter:blur(18px);
+ overflow:hidden;
+ opacity:0;
+ transform:translateY(-10px);
+ pointer-events:none;
+ transition:.25s;
+ box-shadow:0 10px 30px rgba(0,0,0,0.5);
+}
+
+.dropdown.active .dropdown-menu{
+ opacity:1;
+ transform:translateY(0);
+ pointer-events:auto;
+}
+
+/* OPTIONS */
+.option{
+ padding:12px 14px;
+ cursor:pointer;
+ transition:.2s;
+ font-size:14px;
+}
+
+.option:hover{
+ background:rgba(255,255,255,0.08);
+}
+
+.option.active{
+ background:rgba(79,172,254,0.2);
+ color:#4facfe;
+}
+
+.active{background:#28c840;}
+.flagged{background:#ff5f57;}
+.investigating{background:#ffbd2e;color:#000;}
+</style>
+</head>
+
+<body>
+
+<div class="window">
+
+<div class="titlebar">
+  <div class="dots">
+    <div class="dot red"></div>
+    <div class="dot yellow"></div>
+    <div class="dot green"></div>
+  </div>
+  <div class="title">SYSTEM LEADERBOARD</div>
+</div>
+
+<div class="container">
+
+<!-- TOP BAR -->
+<div class="topBar">
+  <div class="searchBox">
+    <span class="searchIcon">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="white" stroke-width="2">
+        <circle cx="11" cy="11" r="7"></circle>
+        <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+      </svg>
+    </span>
+    <input type="text" id="search" placeholder="Search players, teams..." />
+  </div>
+  <div class="dropdown">
+  <div class="dropdown-btn" id="dropdownBtn">
+    <span id="selectedOption">All Players</span>
+    <span class="arrow">▾</span>
+  </div>
+
+  <div class="dropdown-menu" id="dropdownMenu">
+    <div class="option active" data-value="all">All Players</div>
+    <div class="option" data-value="top10">Top 10</div>
+    <div class="option" data-value="flagged">Flagged</div>
+  </div>
+</div>
+</div>
+
+<!-- PODIUM -->
+<div class="podium" id="podium"></div>
+
+<!-- TABLE -->
+<div class="tableWrap">
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Player</th>
+<th>Team</th>
+<th>Score</th>
+<th>Accuracy</th>
+<th>Submissions</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody id="tbody"></tbody>
+</table>
+</div>
+
+</div>
+</div>
+
+<script>
+let players = [
+{name:"Arjun Mehta",team:"Nova",score:9820,acc:"98%",sub:120,status:"active"},
+{name:"Riya Sharma",team:"Alpha",score:9450,acc:"96%",sub:110,status:"active"},
+{name:"Kabir Verma",team:"Beta",score:9100,acc:"93%",sub:105,status:"investigating"},
+{name:"Ananya Gupta",team:"Nova",score:8700,acc:"91%",sub:100,status:"active"},
+{name:"Rahul Khanna",team:"Gamma",score:8400,acc:"88%",sub:98,status:"flagged"},
+{name:"Sneha Iyer",team:"Alpha",score:8200,acc:"87%",sub:95,status:"active"}
+];
+
+/* STEP 1: SORT & ASSIGN RANK ONCE */
+players.sort((a,b)=>b.score-a.score);
+players.forEach((p,i)=> p.rank = i+1);
+
+function render(data){
+ const tb=document.getElementById("tbody");
+ const pd=document.getElementById("podium");
+ tb.innerHTML=""; 
+ pd.innerHTML="";
+
+ /* PODIUM (TOP 3 BASED ON ORIGINAL LIST) */
+ players.slice(0,3).forEach((p,i)=>{
+  const cls=i==0?"gold":i==1?"silver":"bronze";
+  pd.innerHTML+=`
+  <div class="card ${cls}">
+    <h2>#${p.rank}</h2>
+    <div>${p.name}</div>
+    <small>${p.score}</small>
+  </div>`;
+ });
+
+ /* TABLE */
+ data.forEach((p)=>{
+  tb.innerHTML+=`
+  <tr>
+    <td>#${p.rank}</td>
+    <td>${p.name}</td>
+    <td>${p.team}</td>
+    <td>${p.score}</td>
+    <td>${p.acc}</td>
+    <td>${p.sub}</td>
+    <td><span class="status ${p.status}">${p.status}</span></td>
+  </tr>`;
+ });
+}
+
+render(players);
+
+/* SEARCH */
+document.getElementById("search").oninput=(e)=>{
+ const val=e.target.value.toLowerCase();
+ const filtered = players.filter(p => 
+   p.name.toLowerCase().includes(val)
+ );
+ render(filtered);
+};
+
+/* FILTER */
+const dropdown = document.querySelector(".dropdown");
+const btn = document.getElementById("dropdownBtn");
+const menu = document.getElementById("dropdownMenu");
+const selectedText = document.getElementById("selectedOption");
+
+btn.onclick = () => {
+ dropdown.classList.toggle("active");
+};
+
+document.querySelectorAll(".option").forEach(opt => {
+ opt.onclick = () => {
+
+  // UI update
+  document.querySelectorAll(".option").forEach(o => o.classList.remove("active"));
+  opt.classList.add("active");
+
+  selectedText.innerText = opt.innerText;
+  dropdown.classList.remove("active");
+
+  // FILTER LOGIC
+  const val = opt.dataset.value;
+
+  if(val==="top10") render(players.slice(0,10));
+  else if(val==="flagged") render(players.filter(p=>p.status==="flagged"));
+  else render(players);
+ };
+});
+
+/* CLOSE ON OUTSIDE CLICK */
+document.addEventListener("click", (e)=>{
+ if(!dropdown.contains(e.target)){
+  dropdown.classList.remove("active");
+ }
+});
+
+/* MAC DOTS */
+const win=document.querySelector('.window');
+const dots=document.querySelectorAll('.dot');
+
+dots[0].onclick=()=>win.style.display="none";
+dots[1].onclick=()=>{
+ win.style.transform='scale(0.9) translateY(140%)';
+ win.style.opacity='0';
+ document.body.onclick=()=>{
+  win.style.transform='';win.style.opacity='';document.body.onclick=null;
+ };
+};
+dots[2].onclick=()=>{
+ win.classList.toggle("maximized");
+ if(win.classList.contains("maximized")){
+  win.style.width="100vw";win.style.height="100vh";win.style.margin="0";win.style.borderRadius="0";
+ }else{
+  win.style.width="";win.style.height="";win.style.margin="";win.style.borderRadius="";
+ }
+};
+
+function updateLeaderboard(newData){
+ players = newData;
+
+ players.sort((a,b)=>b.score-a.score);
+ players.forEach((p,i)=> p.rank = i+1);
+
+ render(players);
+}
+</script>
+
+</body>
+</html>
